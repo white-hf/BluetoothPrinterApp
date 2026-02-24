@@ -27,10 +27,12 @@ The original printer flow depended on a download API. This standalone app adds l
 - `Sources/Shared`: toast UI/feedback helpers.
 - `Config/Info.plist`: app permissions and bundle metadata.
 - `project.yml`: XcodeGen spec used to regenerate project.
+- `docs/ARCHITECTURE.md`: architecture and data flow.
+- `docs/TEST_PLAN.md`: test strategy and manual checks.
 
 ## Requirements
 
-- Xcode 16+ (tested with Xcode 26.2 toolchain in this environment)
+- Xcode 16+
 - iOS 16+
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
@@ -61,17 +63,37 @@ The original printer flow depended on a download API. This standalone app adds l
 4. Confirm each printed label or use retry/skip when needed.
 5. View results in **History** tab.
 
-## Notes
+## Compatibility
 
-- Bluetooth permissions are configured in `Info.plist`.
-- Queue uses a dictionary (`fileDictionary`) to map each print job to its imported local file URL.
-- If your printer uses a different write characteristic UUID, update it in **Settings**.
+### Verified baseline
 
-## Build check used in this workspace
+- iOS 16+ iPhone devices with Bluetooth enabled.
+- Polono PL80E BLE thermal printer.
 
-Unsigned build command:
+### Likely compatible
+
+- TSPL-compatible BLE thermal printers that expose a writable BLE characteristic.
+- You may need to configure characteristic UUIDs in app settings.
+
+## Known limitations
+
+- BLE only. Classic Bluetooth-only printers are not supported.
+- Prints first page of selected PDF (multi-page batch splitting is not implemented).
+- No real-time printer status protocol; completion uses manual confirm + timeout.
+- Rendering and transport are tuned for shipping-label style PDFs.
+
+## Open source project files
+
+- `LICENSE`
+- `CONTRIBUTING.md`
+- `CODE_OF_CONDUCT.md`
+- `SECURITY.md`
+- `.github/ISSUE_TEMPLATE/*`
+- `.github/PULL_REQUEST_TEMPLATE.md`
+- `.github/workflows/ios.yml`
+
+## Build command
 
 ```bash
 xcodebuild -project BluetoothPrinterApp.xcodeproj -scheme BluetoothPrinterApp -destination 'generic/platform=iOS' -derivedDataPath /tmp/BluetoothPrinterDerived CODE_SIGNING_ALLOWED=NO build
 ```
-

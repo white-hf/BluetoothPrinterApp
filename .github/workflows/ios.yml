@@ -1,0 +1,31 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      - name: Build (no signing)
+        run: |
+          xcodebuild \
+            -project BluetoothPrinterApp.xcodeproj \
+            -scheme BluetoothPrinterApp \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath /tmp/BluetoothPrinterDerived \
+            CODE_SIGNING_ALLOWED=NO \
+            build
