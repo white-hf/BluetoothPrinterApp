@@ -9,7 +9,7 @@ struct PrinterDiscoveryView: View {
                 ForEach(ble.devices) { item in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(item.name.isEmpty ? "Unknown" : item.name)
+                            Text(item.name.isEmpty ? L10n.unknown : item.name)
                                 .font(.body)
                                 .bold()
                             Text("RSSI: \(item.rssi)")
@@ -17,35 +17,35 @@ struct PrinterDiscoveryView: View {
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
-                        Button("Connect") {
+                        Button(L10n.btnConnect) {
                             ble.connect(item)
                         }
                     }
                 }
             }
 
-            Section("Actions") {
-                Button("Scan") {
+            Section(L10n.actions) {
+                Button(L10n.btnScan) {
                     ble.startScan()
                 }
                 .disabled(ble.state == .scanning)
 
-                Button("Stop Scan", role: .cancel) {
+                Button(L10n.btnStopScan, role: .cancel) {
                     ble.stopScan()
                 }
                 .disabled(!(ble.state == .scanning))
 
-                Button("Disconnect", role: .destructive) {
+                Button(L10n.btnDisconnect, role: .destructive) {
                     ble.disconnect()
                 }
                 .disabled(!isConnected)
             }
 
-            Section("Status") {
+            Section(L10n.status) {
                 statusView
             }
         }
-        .navigationTitle("Bluetooth Printers")
+        .navigationTitle(L10n.tabDevices)
         .onAppear {
             if ble.devices.isEmpty {
                 ble.startScan()
@@ -55,7 +55,7 @@ struct PrinterDiscoveryView: View {
 
     private var header: some View {
         HStack {
-            Text("Nearby devices")
+            Text(L10n.nearbyDevices)
             Spacer()
             if ble.state == .scanning {
                 ProgressView()
@@ -72,18 +72,18 @@ struct PrinterDiscoveryView: View {
     private var statusView: some View {
         switch ble.state {
         case .idle:
-            Text("Idle").foregroundColor(.secondary)
+            Text(L10n.idle).foregroundColor(.secondary)
         case .scanning:
-            Text("Scanning...").foregroundColor(.blue)
+            Text(L10n.bleScanning).foregroundColor(.blue)
         case .connecting(let name):
-            Text("Connecting → \(name ?? "-")").foregroundColor(.orange)
+            Text(L10n.connectingTo(name)).foregroundColor(.orange)
         case .connected(let name):
-            Text("Connected: \(name ?? "-")").foregroundColor(.green)
+            Text(L10n.connectedTo(name)).foregroundColor(.green)
                 .bold()
         case .failed(let error):
-            Text("Failed: \(error)").foregroundColor(.red)
+            Text(L10n.failedWithError(error)).foregroundColor(.red)
         case .disconnected:
-            Text("Disconnected").foregroundColor(.secondary)
+            Text(L10n.bleDisconnected).foregroundColor(.secondary)
         }
     }
 }

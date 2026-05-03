@@ -4,6 +4,24 @@ struct ToastBanner: View {
     let message: ToastMessage
 
     var body: some View {
+        Group {
+            if message.position == .center {
+                VStack {
+                    Spacer()
+                    toastContent
+                    Spacer()
+                }
+            } else { // Default to top for now, or implement specific top/bottom logic
+                VStack {
+                    toastContent
+                    Spacer()
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var toastContent: some View {
         HStack(spacing: 8) {
             Image(systemName: iconName)
             Text(message.text)

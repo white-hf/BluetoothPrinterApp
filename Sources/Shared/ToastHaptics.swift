@@ -41,10 +41,17 @@ enum ToastStyle {
     }
 }
 
+enum ToastPosition {
+    case top
+    case center
+    case bottom
+}
+
 struct ToastMessage: Identifiable, Equatable {
     let id = UUID()
     let text: String
     let style: ToastStyle
+    let position: ToastPosition
 }
 
 @MainActor
@@ -55,16 +62,16 @@ final class ToastHaptics: ObservableObject {
 
     private let feedback = UINotificationFeedbackGenerator()
 
-    func show(_ text: String, style: ToastStyle = .info) {
-        let message = ToastMessage(text: text, style: style)
+    func show(_ text: String, style: ToastStyle = .info, position: ToastPosition = .top) {
+        let message = ToastMessage(text: text, style: style, position: position)
         toast = message
         feedback.prepare()
         feedback.notificationOccurred(style.feedbackType)
         Task { @MainActor in
             if #available(iOS 16.0, *) {
-                try? await Task.sleep(for: .seconds(2.0))
+                try? await Task.sleep(for: .seconds(3.0)) // Changed to 3 seconds
             } else {
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                try? await Task.sleep(nanoseconds: 3_000_000_000) // Changed to 3 seconds
             }
             if toast?.id == message.id {
                 toast = nil

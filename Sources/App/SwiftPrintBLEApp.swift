@@ -1,10 +1,11 @@
 import SwiftUI
 
 @main
-struct BluetoothPrinterAppEntry: App {
+struct SwiftPrintBLEApp: App {
     @StateObject private var ble: PrinterBLEManager
     @StateObject private var settings = PrintSettingsStore.shared
     @StateObject private var history = LocalJobHistoryStore.shared
+    @StateObject private var waybillHistory = WaybillJobHistoryStore.shared
     @StateObject private var toastCenter = ToastHaptics.shared
     @StateObject private var autoConnector: BLEAutoConnector
 
@@ -20,12 +21,13 @@ struct BluetoothPrinterAppEntry: App {
                 ble: ble,
                 settings: settings,
                 history: history,
+                waybillHistory: waybillHistory,
                 autoConnector: autoConnector
             )
-            .overlay(alignment: .top) {
+            .overlay(alignment: toastCenter.toast?.position == .center ? .center : .top) {
                 if let toast = toastCenter.toast {
                     ToastBanner(message: toast)
-                        .padding(.top, 8)
+                        .padding(toast.position == .center ? [] : .top, 8) // Corrected padding for center
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }

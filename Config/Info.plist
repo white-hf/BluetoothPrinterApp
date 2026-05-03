@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>SwiftPrint BLE</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,9 +23,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app uses Bluetooth to find and print to thermal printers.</string>
+	<string>SwiftPrint BLE uses Bluetooth to find and print to thermal printers.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>This app uses Bluetooth to connect to your thermal printer.</string>
+	<string>SwiftPrint BLE uses Bluetooth to connect to your thermal printer.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>SwiftPrint BLE uses the camera to scan waybill barcodes.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>SwiftPrint BLE needs access to your local network to discover the printing server automatically.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_labelprint._tcp</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

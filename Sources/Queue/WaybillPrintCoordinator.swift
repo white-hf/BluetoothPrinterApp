@@ -2,44 +2,56 @@ import Foundation
 import UIKit
 
 @MainActor
-final class LocalFilePrintCoordinator: ObservableObject {
-    @Published private(set) var jobs: [LocalPrintJob] = []
+final class WaybillPrintCoordinator: ObservableObject {
+    @Published private(set) var jobs: [WaybillPrintJob] = []
     @Published private(set) var isProcessing: Bool = false
     @Published private(set) var waitingSince: Date?
     @Published var bannerMessage: String?
     @Published private(set) var currentPreview: UIImage?
 
-    var currentJob: LocalPrintJob? { jobs.first }
+    var currentJob: WaybillPrintJob? { jobs.first }
+    var queueCount: Int { max(jobs.count - 1, 0) }
 
     private let ble: PrinterBLEManager
     private let settings: PrintSettingsStore
-    private let history: LocalJobHistoryStore
+    private let history: WaybillJobHistoryStore
     private let renderer = TSPLRenderer()
+    private let api = LabelAPI()
+    private let discovery = ServerDiscoveryManager.shared
 
     private var currentTask: Task<Void, Never>?
     private var pendingConfirmationJobID: UUID?
     private var autoConfirmTask: Task<Void, Never>?
     private var isPaused = true
 
-    // New dictionary to map job -> imported local file URL.
-    private var fileDictionary: [UUID: URL] = [:]
-
     init(
         ble: PrinterBLEManager,
-        settings: PrintSettingsStore,
-        history: LocalJobHistoryStore
+        settings: PrintSettingsStore = .shared,
+        history: WaybillJobHistoryStore = .shared
     ) {
         self.ble = ble
         self.settings = settings
         self.history = history
     }
 
-    func enqueue(displayName: String, localFileURL: URL) {
-        let normalized = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+    private func getEffectiveBaseURL() -> URL? {
+        // If settings has a valid non-default URL, use it
+        if let settingsURL = settings.settings.baseURL, 
+           settings.settings.baseURLString != "http://192.168.1.100:5000" {
+            return settingsURL
+        }
+        // Otherwise, use the first discovered server
+        return discovery.discoveredServers.first?.url ?? settings.settings.baseURL
+    }
+
+    func enqueue(tno: String) {
+        let normalized = tno.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalized.isEmpty else { return }
-        let job = LocalPrintJob(displayName: normalized)
+        // Avoid duplicates in the queue
+        if jobs.contains(where: { $0.tno == normalized }) { return }
+        
+        let job = WaybillPrintJob(tno: normalized)
         jobs.append(job)
-        fileDictionary[job.id] = localFileURL
         if !isPaused {
             pumpQueue()
         }
@@ -48,7 +60,6 @@ final class LocalFilePrintCoordinator: ObservableObject {
     func remove(jobID: UUID) {
         let wasCurrent = currentJob?.id == jobID
         jobs.removeAll { $0.id == jobID }
-        fileDictionary.removeValue(forKey: jobID)
         if pendingConfirmationJobID == jobID {
             pendingConfirmationJobID = nil
             autoConfirmTask?.cancel()
@@ -65,7 +76,6 @@ final class LocalFilePrintCoordinator: ObservableObject {
 
     func clearQueue() {
         jobs.removeAll()
-        fileDictionary.removeAll()
         pendingConfirmationJobID = nil
         autoConfirmTask?.cancel()
         autoConfirmTask = nil
@@ -95,9 +105,8 @@ final class LocalFilePrintCoordinator: ObservableObject {
 
     func confirmCurrentJobCompleted() {
         guard let job = currentJob, job.state == .waitingConfirm else { return }
-        history.record(job.updatingState(.success))
+        history.record(job.updatingState(.success, errorMessage: nil))
         jobs.removeAll { $0.id == job.id }
-        fileDictionary.removeValue(forKey: job.id)
         pendingConfirmationJobID = nil
         autoConfirmTask?.cancel()
         autoConfirmTask = nil
@@ -105,11 +114,12 @@ final class LocalFilePrintCoordinator: ObservableObject {
         currentPreview = nil
         ToastHaptics.shared.show(L10n.printComplete, style: .success)
         pumpQueue()
-    }
+        }
 
     func retryCurrentJob() {
         guard let job = currentJob else { return }
-        let updated = job.incrementingAttempts(state: .queued)
+        var updated = job.incrementingAttempts(state: .queued, errorMessage: nil)
+        updated.errorMessage = nil
         replace(job: updated)
         pendingConfirmationJobID = nil
         waitingSince = nil
@@ -122,21 +132,23 @@ final class LocalFilePrintCoordinator: ObservableObject {
 
     func skipCurrentJob() {
         guard let job = currentJob else { return }
-        history.record(job.updatingState(.skipped))
+        let resolved = job.updatingState(.skipped, errorMessage: nil)
+        history.record(resolved)
         jobs.removeAll { $0.id == job.id }
-        fileDictionary.removeValue(forKey: job.id)
         pendingConfirmationJobID = nil
         waitingSince = nil
         autoConfirmTask?.cancel()
         autoConfirmTask = nil
         currentPreview = nil
-        ToastHaptics.shared.show(L10n.skippedJob(job.displayName), style: .warning)
+        ToastHaptics.shared.show(L10n.skippedJob(job.tno), style: .warning)
         pumpQueue()
     }
 
     func currentJobTimeoutSeconds() -> Int {
         settings.settings.tCompleteSeconds
     }
+
+    // MARK: - Pipeline
 
     private func pumpQueue() {
         guard currentTask == nil else { return }
@@ -164,7 +176,7 @@ final class LocalFilePrintCoordinator: ObservableObject {
         case .waitingConfirm:
             isProcessing = false
             waitingSince = waitingSince ?? Date()
-        case .rendering, .sending:
+        case .downloading, .rendering, .sending:
             break
         case .success, .skipped:
             cleanupTerminalJobs()
@@ -186,28 +198,48 @@ final class LocalFilePrintCoordinator: ObservableObject {
             pumpQueue()
         }
 
-        guard let jobIndex = jobs.index(of: jobID), let fileURL = fileDictionary[jobID] else { return }
+        guard let jobIndex = jobs.index(of: jobID) else { return }
         var job = jobs[jobIndex]
         isProcessing = true
         bannerMessage = nil
         currentPreview = nil
 
         do {
-            job = job.updatingState(.rendering)
+            job = job.updatingState(.downloading, errorMessage: nil)
             replace(job: job)
+            let baseURL = getEffectiveBaseURL()
+            let pdfData: Data
+            do {
+                pdfData = try await api.downloadLabel(tno: job.tno, baseURL: baseURL)
+            } catch {
+                if Self.isNotFound(error) {
+                    let message = L10n.noWaybillFound(job.tno)
+                    let skipped = job.updatingState(.skipped, errorMessage: message)
+                    history.record(skipped)
+                    jobs.removeAll { $0.id == job.id }
+                    pendingConfirmationJobID = nil
+                    waitingSince = nil
+                    currentPreview = nil
+                    ToastHaptics.shared.show(message, style: .warning)
+                    return
+                } else {
+                    throw error
+                }
+            }
 
-            let pdfData = try Data(contentsOf: fileURL)
-            let output = try renderer.render(pdfData: pdfData, settings: settings.settings, tno: job.displayName)
+            job = job.updatingState(.rendering, errorMessage: nil)
+            replace(job: job)
+            let output = try renderer.render(pdfData: pdfData, settings: settings.settings, tno: job.tno)
             currentPreview = renderer.makePreviewImage(from: output, settings: settings.settings)
 
             try Task.checkCancellation()
 
-            job = job.updatingState(.sending)
+            job = job.updatingState(.sending, errorMessage: nil)
             replace(job: job)
             try await ble.connectIfNeeded(defaultPeripheralID: settings.settings.defaultPeripheralID)
             try await ble.sendInChunksAwait(output.data, chunkSize: settings.settings.chunkSize)
 
-            job = job.updatingState(.waitingConfirm)
+            job = job.updatingState(.waitingConfirm, errorMessage: nil)
             replace(job: job)
             pendingConfirmationJobID = job.id
             waitingSince = Date()
@@ -222,9 +254,7 @@ final class LocalFilePrintCoordinator: ObservableObject {
                     try? await Task.sleep(nanoseconds: UInt64(timeout) * 1_000_000_000)
                 }
                 if self.pendingConfirmationJobID == job.id,
-                   let head = self.jobs.first,
-                   head.id == job.id,
-                   head.state == .waitingConfirm {
+                   let head = self.jobs.first, head.id == job.id, head.state == .waitingConfirm {
                     self.confirmCurrentJobCompleted()
                 }
             }
@@ -239,7 +269,7 @@ final class LocalFilePrintCoordinator: ObservableObject {
         }
     }
 
-    private func replace(job: LocalPrintJob) {
+    private func replace(job: WaybillPrintJob) {
         if let index = jobs.index(of: job.id) {
             jobs[index] = job
         }
@@ -252,7 +282,6 @@ final class LocalFilePrintCoordinator: ObservableObject {
             switch job.state {
             case .success, .skipped:
                 history.record(job)
-                fileDictionary.removeValue(forKey: job.id)
                 if job.id == currentID {
                     removedCurrent = true
                 }
@@ -266,5 +295,14 @@ final class LocalFilePrintCoordinator: ObservableObject {
             autoConfirmTask?.cancel()
             autoConfirmTask = nil
         }
+    }
+
+    private static func isNotFound(_ error: Error) -> Bool {
+        let ns = error as NSError
+        if ns.code == 404 { return true }
+        if let status = ns.userInfo["statusCode"] as? Int, status == 404 { return true }
+        if let responseCode = ns.userInfo["HTTPStatusCode"] as? Int, responseCode == 404 { return true }
+        if ns.localizedDescription.contains("404") { return true }
+        return false
     }
 }

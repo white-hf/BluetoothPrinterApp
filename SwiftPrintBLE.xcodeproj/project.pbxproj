@@ -1,0 +1,455 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		267A3B263EEEF1B893DB3274 /* WaybillJobHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A825947A7ECA4E79CF5CB5C /* WaybillJobHistoryView.swift */; };
+		2C4326BA7AC53070DC261294 /* BLEAutoConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5F34DF40624EE573D5EECB /* BLEAutoConnector.swift */; };
+		31354790604DBB199CDC65B3 /* LocalPrintModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAED96F146F7C3FB800C2116 /* LocalPrintModels.swift */; };
+		3A9CF3D00162B15B064BEC85 /* PrintingNowPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3420655AC84FFFD3039E02E1 /* PrintingNowPanel.swift */; };
+		3B8B769B71EF5B79F4D9A489 /* PrinterConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248DEF30C35B6D7E8A794CBD /* PrinterConfigView.swift */; };
+		42318A228EB0E4262F88A63C /* LocalJobHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE8D0DD4B1DC2BA852A86AE /* LocalJobHistoryStore.swift */; };
+		48884EF4D8F04E874CCA34FE /* ServerDiscoveryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863E35228AF9DB64FF89B4CC /* ServerDiscoveryManager.swift */; };
+		50006FDFB10AA07AC125E7E1 /* LocalJobHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4B6D5CF08FAD84B3F57F8 /* LocalJobHistoryView.swift */; };
+		5D89CA8EAAF6A50DF93F6031 /* ToastHaptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDDAFC6CBA26BDC61022D6E /* ToastHaptics.swift */; };
+		654B7785F4F2C6739032862A /* ImportedPDFStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E05309735515D0AC54D7E /* ImportedPDFStore.swift */; };
+		67F13E9FB85C306F751F35CE /* ToastBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B0B40770539063B0E5EB9A /* ToastBanner.swift */; };
+		68B9D4643310420C2B732C24 /* PrinterBLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA2B1CCA46F731317892A63 /* PrinterBLEManager.swift */; };
+		6E9998A7558774D68F4B6CE2 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4C65BB609F91F6353579A5 /* Localization.swift */; };
+		72A1B072A0F75983181F6562 /* LabelAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F95F2D24377D5B561C8D845 /* LabelAPI.swift */; };
+		7B977C8BCA9BB895C550F92E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B24E13F440900634A01B4848 /* Assets.xcassets */; };
+		7D6E9CBB8AD8517A080255AE /* PrintSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1C10B48F4391BBEA379AD9 /* PrintSettings.swift */; };
+		85291CB9B9266F75B89924FE /* ScanEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52105333D20AED52C7B3230B /* ScanEngine.swift */; };
+		8958C6064279AC986F14DD9E /* PrinterDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2E2CFDF5CE6E0BF8A8CC96 /* PrinterDiscoveryView.swift */; };
+		97CEB041A143E4927DC94ECE /* AppLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2BC6C43A04BC4FC274243 /* AppLogoView.swift */; };
+		9992FEE9A4971D5B4A1DD983 /* LocalFilePrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE1FB03C491D4FE82A3925A /* LocalFilePrintView.swift */; };
+		AB9CE73DECF73ABB40D5A3D5 /* WaybillPrintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10573A4F46DFB746D9AA8454 /* WaybillPrintView.swift */; };
+		AF68A89CFCD99C0A38559E86 /* PDFCacheCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42D405BA06D8A08D97A540D /* PDFCacheCleaner.swift */; };
+		B524B9EA80EFAA9C8E6642C9 /* WaybillPrintModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07D79EAF04797CD93A5F9E /* WaybillPrintModels.swift */; };
+		BC3C85A692E0F680D3CDCC17 /* WaybillPrintCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9101456F51DDA90BAA6A0E1E /* WaybillPrintCoordinator.swift */; };
+		C0BB3A6CEB5A8050E8D60EC3 /* LocalFilePrintCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD826B10472FCCA534D56332 /* LocalFilePrintCoordinator.swift */; };
+		D8AB5E288E6142DC8FD18853 /* TSPLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B0D78FAFE0D2DE1A3F0BF4 /* TSPLRenderer.swift */; };
+		E06047320417553C3146FFEC /* SwiftPrintBLEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F322DF585F1C4C9127F6063D /* SwiftPrintBLEApp.swift */; };
+		ECD3C4B646F3A4F2322CD20B /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12CB4920D114AC2852E9D69 /* RootTabView.swift */; };
+		ED188E031D93C103A17829DA /* WaybillJobHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D63E427E4A635BCF2CE1AE /* WaybillJobHistoryStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0AD2BC6C43A04BC4FC274243 /* AppLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogoView.swift; sourceTree = "<group>"; };
+		10573A4F46DFB746D9AA8454 /* WaybillPrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybillPrintView.swift; sourceTree = "<group>"; };
+		1B6E05309735515D0AC54D7E /* ImportedPDFStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedPDFStore.swift; sourceTree = "<group>"; };
+		248DEF30C35B6D7E8A794CBD /* PrinterConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterConfigView.swift; sourceTree = "<group>"; };
+		284EFF0D1D2322DD47EE65AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3420655AC84FFFD3039E02E1 /* PrintingNowPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintingNowPanel.swift; sourceTree = "<group>"; };
+		3CA2B1CCA46F731317892A63 /* PrinterBLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterBLEManager.swift; sourceTree = "<group>"; };
+		51B0B40770539063B0E5EB9A /* ToastBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastBanner.swift; sourceTree = "<group>"; };
+		52105333D20AED52C7B3230B /* ScanEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEngine.swift; sourceTree = "<group>"; };
+		5D5F34DF40624EE573D5EECB /* BLEAutoConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAutoConnector.swift; sourceTree = "<group>"; };
+		5FE1FB03C491D4FE82A3925A /* LocalFilePrintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFilePrintView.swift; sourceTree = "<group>"; };
+		6A825947A7ECA4E79CF5CB5C /* WaybillJobHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybillJobHistoryView.swift; sourceTree = "<group>"; };
+		6BDDAFC6CBA26BDC61022D6E /* ToastHaptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastHaptics.swift; sourceTree = "<group>"; };
+		6C1C10B48F4391BBEA379AD9 /* PrintSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintSettings.swift; sourceTree = "<group>"; };
+		71B0D78FAFE0D2DE1A3F0BF4 /* TSPLRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSPLRenderer.swift; sourceTree = "<group>"; };
+		76B4B6D5CF08FAD84B3F57F8 /* LocalJobHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalJobHistoryView.swift; sourceTree = "<group>"; };
+		7A07D79EAF04797CD93A5F9E /* WaybillPrintModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybillPrintModels.swift; sourceTree = "<group>"; };
+		863E35228AF9DB64FF89B4CC /* ServerDiscoveryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerDiscoveryManager.swift; sourceTree = "<group>"; };
+		9101456F51DDA90BAA6A0E1E /* WaybillPrintCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybillPrintCoordinator.swift; sourceTree = "<group>"; };
+		9F73FFB53AE694C4C3AB610E /* SwiftPrint BLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftPrint BLE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F95F2D24377D5B561C8D845 /* LabelAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelAPI.swift; sourceTree = "<group>"; };
+		A7D63E427E4A635BCF2CE1AE /* WaybillJobHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaybillJobHistoryStore.swift; sourceTree = "<group>"; };
+		B12CB4920D114AC2852E9D69 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		B24E13F440900634A01B4848 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B42D405BA06D8A08D97A540D /* PDFCacheCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCacheCleaner.swift; sourceTree = "<group>"; };
+		BD826B10472FCCA534D56332 /* LocalFilePrintCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFilePrintCoordinator.swift; sourceTree = "<group>"; };
+		EAED96F146F7C3FB800C2116 /* LocalPrintModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPrintModels.swift; sourceTree = "<group>"; };
+		ECE8D0DD4B1DC2BA852A86AE /* LocalJobHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalJobHistoryStore.swift; sourceTree = "<group>"; };
+		ED2E2CFDF5CE6E0BF8A8CC96 /* PrinterDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterDiscoveryView.swift; sourceTree = "<group>"; };
+		F322DF585F1C4C9127F6063D /* SwiftPrintBLEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftPrintBLEApp.swift; sourceTree = "<group>"; };
+		FE4C65BB609F91F6353579A5 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		05360A2BBC4FC66D5C5DA1A8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				465113238504491B13A4DDE9 /* App */,
+				27BD108EB838FE626BF30E4B /* Printer */,
+				A251165C98B1223529B68F68 /* Queue */,
+				6FD28BFCD7AE59657C390473 /* Shared */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		27BD108EB838FE626BF30E4B /* Printer */ = {
+			isa = PBXGroup;
+			children = (
+				5D5F34DF40624EE573D5EECB /* BLEAutoConnector.swift */,
+				9F95F2D24377D5B561C8D845 /* LabelAPI.swift */,
+				3CA2B1CCA46F731317892A63 /* PrinterBLEManager.swift */,
+				248DEF30C35B6D7E8A794CBD /* PrinterConfigView.swift */,
+				ED2E2CFDF5CE6E0BF8A8CC96 /* PrinterDiscoveryView.swift */,
+				3420655AC84FFFD3039E02E1 /* PrintingNowPanel.swift */,
+				6C1C10B48F4391BBEA379AD9 /* PrintSettings.swift */,
+				71B0D78FAFE0D2DE1A3F0BF4 /* TSPLRenderer.swift */,
+			);
+			path = Printer;
+			sourceTree = "<group>";
+		};
+		2BCCD772623A3D4C3297223A = {
+			isa = PBXGroup;
+			children = (
+				B24E13F440900634A01B4848 /* Assets.xcassets */,
+				772C5A0CC5586161F14F84B2 /* Config */,
+				05360A2BBC4FC66D5C5DA1A8 /* Sources */,
+				6C3CC130CD315641B6984F2D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		465113238504491B13A4DDE9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				B12CB4920D114AC2852E9D69 /* RootTabView.swift */,
+				F322DF585F1C4C9127F6063D /* SwiftPrintBLEApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6C3CC130CD315641B6984F2D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F73FFB53AE694C4C3AB610E /* SwiftPrint BLE.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6FD28BFCD7AE59657C390473 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0AD2BC6C43A04BC4FC274243 /* AppLogoView.swift */,
+				FE4C65BB609F91F6353579A5 /* Localization.swift */,
+				B42D405BA06D8A08D97A540D /* PDFCacheCleaner.swift */,
+				52105333D20AED52C7B3230B /* ScanEngine.swift */,
+				863E35228AF9DB64FF89B4CC /* ServerDiscoveryManager.swift */,
+				51B0B40770539063B0E5EB9A /* ToastBanner.swift */,
+				6BDDAFC6CBA26BDC61022D6E /* ToastHaptics.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		772C5A0CC5586161F14F84B2 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				284EFF0D1D2322DD47EE65AD /* Info.plist */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		A251165C98B1223529B68F68 /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				1B6E05309735515D0AC54D7E /* ImportedPDFStore.swift */,
+				BD826B10472FCCA534D56332 /* LocalFilePrintCoordinator.swift */,
+				5FE1FB03C491D4FE82A3925A /* LocalFilePrintView.swift */,
+				ECE8D0DD4B1DC2BA852A86AE /* LocalJobHistoryStore.swift */,
+				76B4B6D5CF08FAD84B3F57F8 /* LocalJobHistoryView.swift */,
+				EAED96F146F7C3FB800C2116 /* LocalPrintModels.swift */,
+				A7D63E427E4A635BCF2CE1AE /* WaybillJobHistoryStore.swift */,
+				6A825947A7ECA4E79CF5CB5C /* WaybillJobHistoryView.swift */,
+				9101456F51DDA90BAA6A0E1E /* WaybillPrintCoordinator.swift */,
+				7A07D79EAF04797CD93A5F9E /* WaybillPrintModels.swift */,
+				10573A4F46DFB746D9AA8454 /* WaybillPrintView.swift */,
+			);
+			path = Queue;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D9F48395C3B3B546B997E177 /* SwiftPrintBLE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC0DDFDB5C4F7E49A02A8D3E /* Build configuration list for PBXNativeTarget "SwiftPrintBLE" */;
+			buildPhases = (
+				9CE6645DE0F7176C234827CD /* Sources */,
+				BA897DB7C2A04403233B282E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftPrintBLE;
+			packageProductDependencies = (
+			);
+			productName = SwiftPrintBLE;
+			productReference = 9F73FFB53AE694C4C3AB610E /* SwiftPrint BLE.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BE42D2F55D9F35E96701C211 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D9F48395C3B3B546B997E177 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 06078DB38CC84234B94BD3AF /* Build configuration list for PBXProject "SwiftPrintBLE" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2BCCD772623A3D4C3297223A;
+			minimizedProjectReferenceProxies = 1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D9F48395C3B3B546B997E177 /* SwiftPrintBLE */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA897DB7C2A04403233B282E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B977C8BCA9BB895C550F92E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9CE6645DE0F7176C234827CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97CEB041A143E4927DC94ECE /* AppLogoView.swift in Sources */,
+				2C4326BA7AC53070DC261294 /* BLEAutoConnector.swift in Sources */,
+				654B7785F4F2C6739032862A /* ImportedPDFStore.swift in Sources */,
+				72A1B072A0F75983181F6562 /* LabelAPI.swift in Sources */,
+				C0BB3A6CEB5A8050E8D60EC3 /* LocalFilePrintCoordinator.swift in Sources */,
+				9992FEE9A4971D5B4A1DD983 /* LocalFilePrintView.swift in Sources */,
+				42318A228EB0E4262F88A63C /* LocalJobHistoryStore.swift in Sources */,
+				50006FDFB10AA07AC125E7E1 /* LocalJobHistoryView.swift in Sources */,
+				31354790604DBB199CDC65B3 /* LocalPrintModels.swift in Sources */,
+				6E9998A7558774D68F4B6CE2 /* Localization.swift in Sources */,
+				AF68A89CFCD99C0A38559E86 /* PDFCacheCleaner.swift in Sources */,
+				7D6E9CBB8AD8517A080255AE /* PrintSettings.swift in Sources */,
+				68B9D4643310420C2B732C24 /* PrinterBLEManager.swift in Sources */,
+				3B8B769B71EF5B79F4D9A489 /* PrinterConfigView.swift in Sources */,
+				8958C6064279AC986F14DD9E /* PrinterDiscoveryView.swift in Sources */,
+				3A9CF3D00162B15B064BEC85 /* PrintingNowPanel.swift in Sources */,
+				ECD3C4B646F3A4F2322CD20B /* RootTabView.swift in Sources */,
+				85291CB9B9266F75B89924FE /* ScanEngine.swift in Sources */,
+				48884EF4D8F04E874CCA34FE /* ServerDiscoveryManager.swift in Sources */,
+				E06047320417553C3146FFEC /* SwiftPrintBLEApp.swift in Sources */,
+				D8AB5E288E6142DC8FD18853 /* TSPLRenderer.swift in Sources */,
+				67F13E9FB85C306F751F35CE /* ToastBanner.swift in Sources */,
+				5D89CA8EAAF6A50DF93F6031 /* ToastHaptics.swift in Sources */,
+				ED188E031D93C103A17829DA /* WaybillJobHistoryStore.swift in Sources */,
+				267A3B263EEEF1B893DB3274 /* WaybillJobHistoryView.swift in Sources */,
+				BC3C85A692E0F680D3CDCC17 /* WaybillPrintCoordinator.swift in Sources */,
+				B524B9EA80EFAA9C8E6642C9 /* WaybillPrintModels.swift in Sources */,
+				AB9CE73DECF73ABB40D5A3D5 /* WaybillPrintView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2686F71F77B53642D9708889 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "SwiftPrint BLE";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3121B04675AE2F2BB6C01D59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LP8N8G68LM;
+				INFOPLIST_FILE = Config/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.whitetang.swiftprintble;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B7095FDFB6468D771A8B1739 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LP8N8G68LM;
+				INFOPLIST_FILE = Config/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.whitetang.swiftprintble;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C2FA653EB40148B47A4ECAE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "SwiftPrint BLE";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		06078DB38CC84234B94BD3AF /* Build configuration list for PBXProject "SwiftPrintBLE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2686F71F77B53642D9708889 /* Debug */,
+				C2FA653EB40148B47A4ECAE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CC0DDFDB5C4F7E49A02A8D3E /* Build configuration list for PBXNativeTarget "SwiftPrintBLE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3121B04675AE2F2BB6C01D59 /* Debug */,
+				B7095FDFB6468D771A8B1739 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BE42D2F55D9F35E96701C211 /* Project object */;
+}

@@ -1,7 +1,8 @@
 import Foundation
 
-enum LocalPrintJobState: String, Codable, CaseIterable {
+enum WaybillPrintJobState: String, Codable, CaseIterable {
     case queued
+    case downloading
     case rendering
     case sending
     case waitingConfirm
@@ -21,36 +22,37 @@ enum LocalPrintJobState: String, Codable, CaseIterable {
     var stateDescription: String {
         switch self {
         case .queued: return L10n.jobQueued
+        case .downloading: return L10n.jobDownloading
         case .rendering: return L10n.jobRendering
         case .sending: return L10n.jobSending
         case .waitingConfirm: return L10n.jobWaitingConfirm
-        case .success: return L10n.jobSuccess
         case .failed: return L10n.jobFailed
+        case .success: return L10n.jobSuccess
         case .skipped: return L10n.jobSkipped
         }
     }
 }
 
-struct LocalPrintJob: Identifiable, Codable, Equatable {
+struct WaybillPrintJob: Identifiable, Codable, Equatable {
     let id: UUID
-    var displayName: String
+    var tno: String
     var createdAt: Date
     var updatedAt: Date
-    var state: LocalPrintJobState
+    var state: WaybillPrintJobState
     var errorMessage: String?
     var attempts: Int
 
     init(
         id: UUID = UUID(),
-        displayName: String,
+        tno: String,
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
-        state: LocalPrintJobState = .queued,
+        state: WaybillPrintJobState = .queued,
         errorMessage: String? = nil,
         attempts: Int = 0
     ) {
         self.id = id
-        self.displayName = displayName
+        self.tno = tno
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.state = state
@@ -58,32 +60,32 @@ struct LocalPrintJob: Identifiable, Codable, Equatable {
         self.attempts = attempts
     }
 
-    func updatingState(_ newState: LocalPrintJobState, errorMessage: String? = nil) -> LocalPrintJob {
-        LocalPrintJob(
+    func updatingState(_ newState: WaybillPrintJobState, errorMessage: String? = nil) -> WaybillPrintJob {
+        WaybillPrintJob(
             id: id,
-            displayName: displayName,
+            tno: tno,
             createdAt: createdAt,
             updatedAt: Date(),
             state: newState,
-            errorMessage: errorMessage,
+            errorMessage: errorMessage ?? self.errorMessage,
             attempts: attempts
         )
     }
 
-    func incrementingAttempts(state newState: LocalPrintJobState, errorMessage: String? = nil) -> LocalPrintJob {
-        LocalPrintJob(
+    func incrementingAttempts(state newState: WaybillPrintJobState, errorMessage: String? = nil) -> WaybillPrintJob {
+        WaybillPrintJob(
             id: id,
-            displayName: displayName,
+            tno: tno,
             createdAt: createdAt,
             updatedAt: Date(),
             state: newState,
-            errorMessage: errorMessage,
+            errorMessage: errorMessage ?? self.errorMessage,
             attempts: attempts + 1
         )
     }
 }
 
-extension Array where Element == LocalPrintJob {
+extension Array where Element == WaybillPrintJob {
     func index(of jobID: UUID) -> Int? {
         firstIndex { $0.id == jobID }
     }

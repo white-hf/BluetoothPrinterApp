@@ -3,6 +3,7 @@ import SwiftUI
 struct PrinterConfigView: View {
     @ObservedObject var settings: PrintSettingsStore
     @ObservedObject var ble: PrinterBLEManager
+    @StateObject private var discovery = ServerDiscoveryManager.shared
 
     @State private var threshold: Double = Double(PrintSettings.default.threshold)
     @State private var chunkSize: Int = PrintSettings.default.chunkSize
@@ -12,25 +13,63 @@ struct PrinterConfigView: View {
     @State private var tCompleteSeconds: Double = Double(PrintSettings.default.tCompleteSeconds)
     @State private var resolution: PrintSettings.Resolution = PrintSettings.default.resolution
     @State private var showWaybillOverlay: Bool = PrintSettings.default.showWaybillOverlay
+    @State private var baseURLString: String = PrintSettings.default.baseURLString
     @State private var writeUUIDsText: String = PrintSettings.default.writeCharacteristicUUIDs.joined(separator: "\n")
     @State private var isTestingConnection = false
 
     var body: some View {
         Form {
-            Section("Printer") {
+            Section {
+                VStack {
+                    AppLogoView(size: 80)
+                    Text(L10n.appName)
+                        .font(.headline)
+                    Text("v1.0.0")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+            }
+
+            Section(L10n.serverSection) {
+                TextField(L10n.baseURLPlaceholder, text: $baseURLString)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                
                 HStack {
-                    Text("Default printer")
+                    Text("Auto Discovery (mDNS)")
+                    Spacer()
+                    if discovery.isSearching {
+                        ProgressView().scaleEffect(0.8)
+                    }
+                    Button("Refresh") {
+                        discovery.startDiscovery()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+                
+                LabeledContent("Last Status", value: discovery.lastStatus)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Section(L10n.printerSection) {
+                HStack {
+                    Text(L10n.defaultPrinter)
                     Spacer()
                     if let name = settings.settings.defaultPeripheralName {
                         Text(name)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Not set")
+                        Text(L10n.notSet)
                             .foregroundColor(.secondary)
                     }
                 }
                 HStack {
-                    Text("Auto confirm (seconds)")
+                    Text(L10n.autoConfirmSeconds)
                     Spacer()
                     Stepper(value: $tCompleteSeconds, in: 3...30, step: 1) {
                         Text("\(Int(tCompleteSeconds))")
@@ -38,7 +77,7 @@ struct PrinterConfigView: View {
                     }
                     .frame(width: 140)
                 }
-                Button("Use current connected printer") {
+                Button(L10n.useConnectedPrinter) {
                     settings.update { settings in
                         settings.defaultPeripheralID = ble.connectedPeripheralIdentifier
                         settings.defaultPeripheralName = ble.connectedName
@@ -47,27 +86,27 @@ struct PrinterConfigView: View {
                 .disabled(ble.connectedPeripheralIdentifier == nil)
             }
 
-            Section("Render & Transfer") {
+            Section(L10n.renderSection) {
                 HStack {
-                    Text("Threshold: \(Int(threshold))")
+                    Text("\(L10n.thresholdLabel): \(Int(threshold))")
                     Slider(value: $threshold, in: 80...220, step: 1)
                 }
-                Toggle("Invert", isOn: $invert)
-                Toggle("LSB first", isOn: $lsbFirst)
-                Toggle("TSPL compression", isOn: $compression)
-                Toggle("Draw filename overlay", isOn: $showWaybillOverlay)
-                Picker("Resolution", selection: $resolution) {
-                    Text("Standard 800x1200").tag(PrintSettings.Resolution.standard)
-                    Text("Fast 600x900").tag(PrintSettings.Resolution.fast)
+                Toggle(L10n.invertLabel, isOn: $invert)
+                Toggle(L10n.lsbFirstLabel, isOn: $lsbFirst)
+                Toggle(L10n.compressionLabel, isOn: $compression)
+                Toggle(L10n.filenameOverlayLabel, isOn: $showWaybillOverlay)
+                Picker(L10n.resolutionLabel, selection: $resolution) {
+                    Text(L10n.resStandard).tag(PrintSettings.Resolution.standard)
+                    Text(L10n.resFast).tag(PrintSettings.Resolution.fast)
                 }
-                Picker("BLE chunk size", selection: $chunkSize) {
+                Picker(L10n.bleChunkSizeLabel, selection: $chunkSize) {
                     ForEach([256, 512, 768, 1024, 2048], id: \.self) { size in
                         Text("\(size) bytes").tag(size)
                     }
                 }
                 .pickerStyle(.segmented)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Write characteristic UUIDs (comma or newline separated)")
+                    Text(L10n.writeUUIDsLabel)
                     TextEditor(text: $writeUUIDsText)
                         .frame(minHeight: 80)
                         .textInputAutocapitalization(.never)
@@ -77,10 +116,10 @@ struct PrinterConfigView: View {
                 }
             }
         }
-        .navigationTitle("Print Settings")
+        .navigationTitle(L10n.tabSettings)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Save") {
+                Button(L10n.btnSave) {
                     persist()
                 }
             }
@@ -88,7 +127,7 @@ struct PrinterConfigView: View {
         .onAppear(perform: load)
         .safeAreaInset(edge: .bottom) {
             Button(action: testConnection) {
-                Label("Test Bluetooth", systemImage: "bolt.horizontal")
+                Label(L10n.testBluetooth, systemImage: "bolt.horizontal")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
@@ -108,12 +147,13 @@ struct PrinterConfigView: View {
         tCompleteSeconds = Double(value.tCompleteSeconds)
         resolution = value.resolution
         showWaybillOverlay = value.showWaybillOverlay
+        baseURLString = value.baseURLString
         writeUUIDsText = value.writeCharacteristicUUIDs.joined(separator: "\n")
     }
 
     private func testConnection() {
         guard settings.settings.defaultPeripheralID != nil else {
-            ToastHaptics.shared.show("Set a default printer first", style: .warning)
+            ToastHaptics.shared.show(L10n.setupPrinterFirst, style: .warning)
             return
         }
         isTestingConnection = true
@@ -121,9 +161,9 @@ struct PrinterConfigView: View {
             defer { isTestingConnection = false }
             do {
                 try await ble.connectIfNeeded(defaultPeripheralID: settings.settings.defaultPeripheralID)
-                ToastHaptics.shared.show("Bluetooth connection is healthy", style: .success)
+                ToastHaptics.shared.show(L10n.bleConnectionHealthy, style: .success)
             } catch {
-                ToastHaptics.shared.show("Bluetooth test failed: \(error.localizedDescription)", style: .error)
+                ToastHaptics.shared.show(L10n.bleFailedWithError(error.localizedDescription), style: .error)
             }
         }
     }
@@ -138,12 +178,13 @@ struct PrinterConfigView: View {
             value.tCompleteSeconds = Int(tCompleteSeconds)
             value.resolution = resolution
             value.showWaybillOverlay = showWaybillOverlay
+            value.baseURLString = baseURLString
             let tokens = writeUUIDsText
                 .split(whereSeparator: { $0 == "," || $0.isNewline })
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
             value.writeCharacteristicUUIDs = tokens.isEmpty ? PrintSettings.default.writeCharacteristicUUIDs : tokens
         }
-        ToastHaptics.shared.show("Settings saved", style: .success)
+        ToastHaptics.shared.show(L10n.settingsSaved, style: .success)
     }
 }

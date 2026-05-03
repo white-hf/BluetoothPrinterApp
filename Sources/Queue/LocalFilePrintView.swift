@@ -25,43 +25,43 @@ struct LocalFilePrintView: View {
 
     var body: some View {
         List {
-            Section("Connection") {
+            Section(L10n.connectionSection) {
                 Label(connectionDescription, systemImage: connectionIcon)
                     .foregroundColor(connectionTint)
                 if ble.connectedPeripheralIdentifier == nil {
-                    Text("Go to Devices tab and connect a printer first.")
+                    Text(L10n.bleSetupFirst)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                 }
             }
 
-            Section("Queue") {
+            Section(L10n.queueSection) {
                 Button {
                     showFileImporter = true
                 } label: {
-                    Label("Choose PDF files", systemImage: "doc.badge.plus")
+                    Label(L10n.choosePDFFiles, systemImage: "doc.badge.plus")
                 }
 
                 HStack {
-                    Button("Start") { coordinator.start() }
+                    Button(L10n.btnStart) { coordinator.start() }
                         .buttonStyle(.borderedProminent)
                         .disabled(coordinator.jobs.isEmpty)
-                    Button("Pause") { coordinator.pauseProcessing() }
+                    Button(L10n.btnPause) { coordinator.pauseProcessing() }
                         .buttonStyle(.bordered)
-                    Button("Clear", role: .destructive) { coordinator.clearQueue() }
+                    Button(L10n.btnClear, role: .destructive) { coordinator.clearQueue() }
                         .buttonStyle(.bordered)
                         .disabled(coordinator.jobs.isEmpty)
                 }
 
                 if coordinator.jobs.isEmpty {
-                    Text("No files queued.")
+                    Text(L10n.queueEmpty)
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(coordinator.jobs) { job in
                         VStack(alignment: .leading, spacing: 4) {
                             Text(job.displayName)
                                 .font(.subheadline)
-                            Text(stateText(job.state))
+                            Text(job.state.stateDescription)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             if let message = job.errorMessage, !message.isEmpty {
@@ -75,30 +75,30 @@ struct LocalFilePrintView: View {
             }
 
             if let job = coordinator.currentJob {
-                Section("Current Job") {
+                Section(L10n.currentJobSection) {
                     Text(job.displayName).font(.headline)
                     if job.state == .waitingConfirm {
                         let elapsed = coordinator.waitingSince.map { Int(now.timeIntervalSince($0)) } ?? 0
                         let remain = max(coordinator.currentJobTimeoutSeconds() - elapsed, 0)
-                        Text("Waiting confirmation (\(remain)s)")
+                        Text(L10n.waitConfirmation + " (\(remain)s)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
 
                     HStack {
                         if coordinator.currentPreview != nil {
-                            Button("Preview") {
+                            Button(L10n.btnPreview) {
                                 previewImage = coordinator.currentPreview
                                 showPreview = previewImage != nil
                             }
                             .buttonStyle(.bordered)
                         }
                         if job.state == .waitingConfirm {
-                            Button("Confirm") { coordinator.confirmCurrentJobCompleted() }
+                            Button(L10n.btnConfirm) { coordinator.confirmCurrentJobCompleted() }
                                 .buttonStyle(.borderedProminent)
-                            Button("Retry") { coordinator.retryCurrentJob() }
+                            Button(L10n.btnRetry) { coordinator.retryCurrentJob() }
                                 .buttonStyle(.bordered)
-                            Button("Skip", role: .destructive) { coordinator.skipCurrentJob() }
+                            Button(L10n.btnSkip, role: .destructive) { coordinator.skipCurrentJob() }
                                 .buttonStyle(.bordered)
                         }
                     }
@@ -111,7 +111,7 @@ struct LocalFilePrintView: View {
                 }
             }
         }
-        .navigationTitle("Local PDF Printing")
+        .navigationTitle(L10n.tabLocal)
         .fileImporter(
             isPresented: $showFileImporter,
             allowedContentTypes: [UTType.pdf],
@@ -129,11 +129,11 @@ struct LocalFilePrintView: View {
                             .scaledToFit()
                             .padding()
                     } else {
-                        Text("No preview available")
+                        Text(L10n.noPreview)
                             .foregroundColor(.secondary)
                     }
                 }
-                .navigationTitle("Print Preview")
+                .navigationTitle(L10n.printPreview)
             }
         }
         .onReceive(timer) { value in
@@ -154,41 +154,29 @@ struct LocalFilePrintView: View {
                     let imported = try ImportedPDFStore.shared.importFile(from: source)
                     coordinator.enqueue(displayName: imported.displayName, localFileURL: imported.localURL)
                 } catch {
-                    ToastHaptics.shared.show("Import failed: \(error.localizedDescription)", style: .error)
+                    ToastHaptics.shared.show(L10n.importFailed(error.localizedDescription), style: .error)
                 }
             }
-            ToastHaptics.shared.show("Added \(urls.count) file(s)", style: .success)
+            ToastHaptics.shared.show(L10n.addedFiles(urls.count), style: .success)
         case .failure(let error):
-            ToastHaptics.shared.show("File picker error: \(error.localizedDescription)", style: .error)
-        }
-    }
-
-    private func stateText(_ state: LocalPrintJobState) -> String {
-        switch state {
-        case .queued: return "Queued"
-        case .rendering: return "Rendering"
-        case .sending: return "Sending"
-        case .waitingConfirm: return "Waiting confirm"
-        case .success: return "Success"
-        case .failed: return "Failed"
-        case .skipped: return "Skipped"
+            ToastHaptics.shared.show(L10n.filePickerError(error.localizedDescription), style: .error)
         }
     }
 
     private var connectionDescription: String {
         switch ble.state {
         case .connected(let name):
-            return "Connected: \(name ?? "-")"
+            return L10n.bleConnectedTo(name)
         case .connecting(let name):
-            return "Connecting: \(name ?? "-")"
+            return L10n.bleConnectingTo(name)
         case .scanning:
-            return "Scanning..."
+            return L10n.bleScanning
         case .failed(let error):
-            return "Failed: \(error)"
+            return L10n.bleFailedWithError("\(error)")
         case .disconnected:
-            return "Disconnected"
+            return L10n.bleDisconnected
         default:
-            return "Not connected"
+            return L10n.notSet
         }
     }
 

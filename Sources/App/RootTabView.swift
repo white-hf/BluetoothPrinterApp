@@ -4,36 +4,42 @@ struct RootTabView: View {
     @ObservedObject var ble: PrinterBLEManager
     @ObservedObject var settings: PrintSettingsStore
     @ObservedObject var history: LocalJobHistoryStore
+    @ObservedObject var waybillHistory: WaybillJobHistoryStore
     @ObservedObject var autoConnector: BLEAutoConnector
 
     var body: some View {
         TabView {
             NavigationStack {
+                WaybillPrintView(
+                    ble: ble,
+                    settings: settings,
+                    history: waybillHistory,
+                    autoConnector: autoConnector
+                )
+            }
+            .tabItem {
+                Label(L10n.tabScan, systemImage: "qrcode.viewfinder")
+            }
+
+            NavigationStack {
                 LocalFilePrintView(ble: ble, settings: settings, history: history)
             }
             .tabItem {
-                Label("Print", systemImage: "printer")
+                Label(L10n.tabLocal, systemImage: "doc.badge.plus")
             }
 
             NavigationStack {
                 PrinterDiscoveryView(ble: ble)
             }
             .tabItem {
-                Label("Devices", systemImage: "dot.radiowaves.left.and.right")
+                Label(L10n.tabDevices, systemImage: "antenna.radiowaves.left.and.right")
             }
 
             NavigationStack {
                 PrinterConfigView(settings: settings, ble: ble)
             }
             .tabItem {
-                Label("Settings", systemImage: "slider.horizontal.3")
-            }
-
-            NavigationStack {
-                LocalJobHistoryView(history: history)
-            }
-            .tabItem {
-                Label("History", systemImage: "clock.arrow.circlepath")
+                Label(L10n.tabSettings, systemImage: "gearshape.2")
             }
         }
     }

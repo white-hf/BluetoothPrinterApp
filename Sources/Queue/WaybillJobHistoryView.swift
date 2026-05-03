@@ -1,14 +1,15 @@
 import SwiftUI
 
-struct LocalJobHistoryView: View {
-    @ObservedObject var history: LocalJobHistoryStore
+struct WaybillJobHistoryView: View {
+    @ObservedObject var history: WaybillJobHistoryStore
+    @Environment(\.dismiss) var dismiss
 
     @State private var query: String = ""
     @State private var showClearConfirm = false
 
-    private var filtered: [LocalPrintJob] {
+    private var filtered: [WaybillPrintJob] {
         guard !query.isEmpty else { return history.jobs }
-        return history.jobs.filter { $0.displayName.localizedCaseInsensitiveContains(query) }
+        return history.jobs.filter { $0.tno.localizedCaseInsensitiveContains(query) }
     }
 
     var body: some View {
@@ -21,12 +22,12 @@ struct LocalJobHistoryView: View {
             } else {
                 Section(header: Text(L10n.totalItems(history.jobs.count))) {
                     ForEach(filtered) { job in
-                        HistoryRow(job: job)
+                        WaybillHistoryRow(job: job)
                     }
                 }
             }
         }
-        .searchable(text: $query, prompt: L10n.searchPlaceholder)
+        .searchable(text: $query, prompt: L10n.searchWaybillPrompt)
         .navigationTitle(L10n.tabHistory)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -36,6 +37,9 @@ struct LocalJobHistoryView: View {
                     }
                     .tint(.red)
                 }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(L10n.btnClose) { dismiss() }
             }
         }
         .confirmationDialog(L10n.clearHistoryConfirm, isPresented: $showClearConfirm, titleVisibility: .visible) {
@@ -47,13 +51,13 @@ struct LocalJobHistoryView: View {
     }
 }
 
-private struct HistoryRow: View {
-    let job: LocalPrintJob
+private struct WaybillHistoryRow: View {
+    let job: WaybillPrintJob
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(job.displayName)
+                Text(job.tno)
                     .font(.system(.body, design: .monospaced))
                     .bold()
                 Spacer()
@@ -61,17 +65,25 @@ private struct HistoryRow: View {
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(stateColor.opacity(0.2))
+                    .background(stateColor.opacity(0.15))
                     .foregroundColor(stateColor)
                     .cornerRadius(6)
             }
-            Text(job.createdAt, style: .date)
-                .font(.caption)
-                .foregroundColor(.secondary)
+            HStack {
+                Text(job.createdAt, style: .date)
+                Text(job.createdAt, style: .time)
+                if job.attempts > 1 {
+                    Text("· " + L10n.retryCount(job.attempts - 1))
+                }
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            
             if let message = job.errorMessage, !message.isEmpty {
                 Text(message)
                     .font(.caption)
                     .foregroundColor(.red)
+                    .lineLimit(2)
             }
         }
         .padding(.vertical, 4)

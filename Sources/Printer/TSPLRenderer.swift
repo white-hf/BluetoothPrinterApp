@@ -27,11 +27,11 @@ struct TSPLRenderer {
         var errorDescription: String? {
             switch self {
             case .pdfUnavailable:
-                return "PDF 数据无效"
+                return L10n.errInvalidPDF
             case .pageRenderingFailed:
-                return "无法渲染 PDF 页面"
+                return L10n.errRenderPage
             case .contextCreationFailed:
-                return "创建渲染上下文失败"
+                return L10n.errCreateContext
             }
         }
     }

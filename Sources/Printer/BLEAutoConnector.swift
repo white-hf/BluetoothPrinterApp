@@ -28,7 +28,7 @@ final class BLEAutoConnector: ObservableObject {
                 case .connected:
                     self.persistCurrentPrinterIfNeeded()
                 case .failed(let error):
-                    ToastHaptics.shared.show("蓝牙连接失败：\(error)", style: .error)
+                    ToastHaptics.shared.show(L10n.bleFailedWithError("\(error)"), style: .error)
                 case .disconnected:
                     break
                 default:

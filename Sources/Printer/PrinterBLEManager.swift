@@ -29,15 +29,15 @@ enum PrinterBLEError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .busy:
-            return "打印机仍在发送数据"
+            return L10n.bleBusy
         case .notReady:
-            return "打印机未连接"
+            return L10n.bleNotReady
         case .missingCharacteristic:
-            return "未找到写入特征"
+            return L10n.bleMissingChar
         case .connectionFailed(let message):
             return message
         case .invalidParameters:
-            return "参数非法"
+            return L10n.bleInvalidParams
         }
     }
 }
@@ -59,7 +59,7 @@ struct DiscoveredPeripheral: Identifiable, Equatable {
         self.advName = advertisementData[CBAdvertisementDataLocalNameKey] as? String
         self.manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data
         self.serviceUUIDs = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID]) ?? []
-        self.name = peripheral.name ?? self.advName ?? "Unknown"
+        self.name = peripheral.name ?? self.advName ?? L10n.unknown
     }
 }
 

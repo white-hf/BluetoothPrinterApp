@@ -35,6 +35,7 @@ struct PrintSettings: Codable, Equatable {
     var resolution: Resolution
     var showWaybillOverlay: Bool
     var writeCharacteristicUUIDs: [String]
+    var baseURLString: String
 
     static let `default` = PrintSettings(
         defaultPeripheralID: nil,
@@ -47,8 +48,15 @@ struct PrintSettings: Codable, Equatable {
         tCompleteSeconds: 7,
         resolution: .fast,
         showWaybillOverlay: false,
-        writeCharacteristicUUIDs: ["BEF8D6C9-9C21-4C9E-B632-BD58C1009F9F"]
+        writeCharacteristicUUIDs: ["BEF8D6C9-9C21-4C9E-B632-BD58C1009F9F"],
+        baseURLString: "http://192.168.1.100:5000"
     )
+}
+
+extension PrintSettings {
+    var baseURL: URL? {
+        URL(string: baseURLString)
+    }
 }
 
 @MainActor
